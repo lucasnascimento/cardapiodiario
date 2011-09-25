@@ -1,0 +1,85 @@
+{% extends "template.html" %}
+{% block title %}Ranking de Classificação{% endblock %}
+{% block content %}
+
+	<script language="javascript">
+		$(document).ready(function(){
+			$( "#date" ).datepicker();
+			$( "#dialog-form" ).hide();
+			
+			$( "#newClassification" ).click( function(){
+				$( "#dialog-form" ).show('blind');
+			});
+		});
+	</script>
+
+	<div id="dialog-form" title="Nova Classificação">
+		<p class="validateTips">Todos campos requeridos.</p>	
+		<form action="/manageRestaurante" method="post">
+			<fieldset>
+
+				<label for="nomeFantasia">Nome Fantasia</label>
+				<input type="text" name="nomeFantasia" id='nomeFantasia' class="text ui-widget-content ui-corner-all"/>
+				<label for="contaFacebook">Facebook</label>
+				<input type="text" name="contaFacebook" id='contaFacebook' class="text ui-widget-content ui-corner-all"/>
+				<label for="contaTwitter">Twitter</label>
+				<input type="text" name="contaTwitter" id='contaTwitter' class="text ui-widget-content ui-corner-all"/>
+				
+				<label for="horarioPreferidoEnvio">Horário preferido para envio</label>
+				<select name='horarioPreferidoEnvio' id='horarioPreferidoEnvio' class="text ui-widget-content ui-corner-all">
+					<option value="09:00">09:00</option>
+					<option value="10:00">10:00</option>
+				</select>
+				
+				<div id="accordion">
+					<h3><a href="#">Cardápio Único</a></h3>
+					<div>Cardápio Único</div>
+					<h3><a href="#">Cardápio Semanal</a></h3>
+					<div>Cardápio Semana</div>
+				</div>
+				
+				<div id="destinatarios">
+					
+					
+					
+				</div>
+				
+				
+
+				
+				
+				
+				<input type="submit" value="Salva"/>
+			</fieldset>
+		</form>
+	</div>
+
+
+
+	<a href='/'>Principal</a>
+	<div id="contain" class="ui-widget">
+		<h1>Ranking de Classificação</h1>
+		<table id="classifications" class="ui-widget ui-widget-content">
+			<thead>
+			<tr class="ui-widget-header ">
+				<td/>
+				<td>Posição</td>
+				<td>Jogador</td>
+				<td>Pontos</td>
+			</tr>	
+			</thead>
+			<tbody>
+				{% for rankinkg in rankings %}
+				<tr>
+					<td>
+						<a href='/classification?opt=byPlayer&player={{ rankinkg.player }}'> Ver Classificações </a>
+					<td>{{ forloop.counter }}<td/>
+					<td>{{ rankinkg.player }} </td>
+					<td>{{ rankinkg.points }} </td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>	
+	</div>
+
+{% endblock %}
