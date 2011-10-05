@@ -4,12 +4,20 @@
 
 	<script language="javascript">
 		$(document).ready(function(){
-			$( "#date" ).datepicker();
-			$( "#dialog-form" ).hide();
+			//$( "#date" ).datepicker();
+			//$( "#dialog-form" ).hide();
 			
-			$( "#newClassification" ).click( function(){
-				$( "#dialog-form" ).show('blind');
-			});
+			//$( "#newClassification" ).click( function(){
+			//	$( "#dialog-form" ).show('blind');
+			//});
+			
+			$( "#accordion" ).accordion();
+			
+			$('.accordion .head').click(function() {
+				$(this).next().toggle();
+				return false;
+			}).next().hide();
+			
 		});
 	</script>
 
@@ -30,6 +38,7 @@
 					<option value="09:00">09:00</option>
 					<option value="10:00">10:00</option>
 				</select>
+				<br/>
 				
 				<div id="accordion">
 					<h3><a href="#">Cardápio Único</a></h3>
@@ -43,43 +52,12 @@
 					
 					
 				</div>
-				
-				
 
-				
-				
-				
 				<input type="submit" value="Salva"/>
 			</fieldset>
 		</form>
 	</div>
 
-
-
 	<a href='/'>Principal</a>
-	<div id="contain" class="ui-widget">
-		<h1>Ranking de Classificação</h1>
-		<table id="classifications" class="ui-widget ui-widget-content">
-			<thead>
-			<tr class="ui-widget-header ">
-				<td/>
-				<td>Posição</td>
-				<td>Jogador</td>
-				<td>Pontos</td>
-			</tr>	
-			</thead>
-			<tbody>
-				{% for rankinkg in rankings %}
-				<tr>
-					<td>
-						<a href='/classification?opt=byPlayer&player={{ rankinkg.player }}'> Ver Classificações </a>
-					<td>{{ forloop.counter }}<td/>
-					<td>{{ rankinkg.player }} </td>
-					<td>{{ rankinkg.points }} </td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>	
-	</div>
-
+	
 {% endblock %}
