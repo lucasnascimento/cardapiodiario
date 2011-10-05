@@ -23,24 +23,24 @@ class Cardapio(db.Model):
 	itens = db.ListProperty(db.Key)
 	descricao = db.StringProperty()
 
+class Usuario(db.Model):
+	email = db.ListProperty(db.Email)
+	contaFacebook = db.StringProperty()
+	contaTwitter = db.StringProperty()	
+	
 class Restaurante(db.Model):
 	nomeFantasia = db.StringProperty()
 	conta_facebook = db.StringProperty()
 	conta_twitter = db.StringProperty()
 	clientes = db.ListProperty(db.Key)
-	cardapioUnico = db.ReferenceProperty(Cardapio)
-	cardapioSegunda = db.ReferenceProperty(Cardapio)
-	cardapioTerca = db.ReferenceProperty(Cardapio)
-	cardapioQuarta = db.ReferenceProperty(Cardapio)
-	cardapioQuinta = db.ReferenceProperty(Cardapio)
-	cardapioSexta = db.ReferenceProperty(Cardapio)
-	cardapioSabado = db.ReferenceProperty(Cardapio)
-	cardapioDomingo = db.ReferenceProperty(Cardapio)
-
-class Usuario(db.Model):
-	email = db.ListProperty(db.Email)
-	contaFacebook = db.StringProperty()
-	contaTwitter = db.StringProperty()
+	cardapioUnico = db.ReferenceProperty(Cardapio, collection_name="restaurante_unico_set")
+	cardapioSegunda = db.ReferenceProperty(Cardapio, collection_name="restaurante_segunda_set")
+	cardapioTerca = db.ReferenceProperty(Cardapio, collection_name="restaurante_terca_set")
+	cardapioQuarta = db.ReferenceProperty(Cardapio, collection_name="restaurante_quarta_set")
+	cardapioQuinta = db.ReferenceProperty(Cardapio, collection_name="restaurante_quinta_set")
+	cardapioSexta = db.ReferenceProperty(Cardapio, collection_name="restaurante_sexta_set")
+	cardapioSabado = db.ReferenceProperty(Cardapio, collection_name="restaurante_sabado_set")
+	cardapioDomingo = db.ReferenceProperty(Cardapio, collection_name="restaurante_domingo_set")
 		
 class Agendamento(db.Model):
 	restaurante  = db.ReferenceProperty(Restaurante)
@@ -51,7 +51,6 @@ class HistoricoEnvio(db.Model):
 	usuarios   = db.ReferenceProperty(Usuario)
 	cardapio = db.ReferenceProperty(Cardapio)
 	data = db.DateTimeProperty(auto_now_add=True)
-
 	
 class BaseRequestHandler(webapp.RequestHandler):
 	def generate(self, template_name, template_values={}):
@@ -63,7 +62,7 @@ class BaseRequestHandler(webapp.RequestHandler):
 		
 class MainHandler(BaseRequestHandler):
     def get(self):
-        self.generate('index.html')
+        self.generate('meuRestaurante.html')
 		
 class ClassificationRequest(BaseRequestHandler):
 	def post(self):
@@ -138,9 +137,7 @@ def processRanking():
 	
 	
 
-application = webapp.WSGIApplication([('/', MainHandler)
-							,('/null', null)
-							,('/null', null)]
+application = webapp.WSGIApplication([('/', MainHandler)]
 							,debug=True)
 def main():
 	run_wsgi_app(application)
