@@ -1,6 +1,7 @@
 import logging
 import datetime
 import wsgiref.handlers
+import pyamf
 
 from google.appengine.ext import db
 from pyamf.remoting.gateway.wsgi import WSGIGateway
@@ -51,14 +52,8 @@ def echo(data):
 
 	
 def saveCategoria(newCategoria):
-	if newCategoria._key is None:
-		categoria = CategoriaItemCardapio()
-		categoria.nome = newCategoria.nome
-	else:
-		categoria = db.get(newCategoria._key)
-		categoria.nome = newCategoria.nome
-	categoria.put()
-	return categoria
+	newCategoria.put()
+	return newCategoria
 
 def deleteCategoria(categoriaKey):
 	db.delete(categoriaKey)
@@ -81,10 +76,11 @@ def main():
 		'getItemsCardapio': getItemsCardapio,
 		'saveCategoria': saveCategoria,
     }
-
+	
     gateway = WSGIGateway(services, logger=logging, debug=True)
     wsgiref.handlers.CGIHandler().run(gateway)
 
-
+pyamf.register_class( CategoriaItemCardapio, "CategoriaItemCardapio" )
+	
 if __name__ == '__main__':
     main()
