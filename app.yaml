@@ -10,5 +10,9 @@ handlers:
 - url: /js
   static_dir: js
 
+- url: /crossdomain.xml
+  static_files: static/crossdomain.xml
+  upload: static/crossdomain.xml
+
 - url: .*
   script: main.py
