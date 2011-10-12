@@ -1,5 +1,4 @@
 import logging
-import datetime
 import wsgiref.handlers
 import pyamf
 
@@ -46,10 +45,6 @@ class HistoricoEnvio(db.Model):
 	usuarios   = db.ReferenceProperty(Usuario)
 	cardapio = db.ReferenceProperty(Cardapio)
 	data = db.DateTimeProperty(auto_now_add=True)
-
-def echo(data):
-    return data
-
 	
 def saveCategoria(newCategoria):
 	newCategoria.put()
@@ -70,17 +65,16 @@ def getItemsCardapio():
 	
 	
 def main():
-    services = {
-        'echo': echo,
+	services = {
 		'getCategorias': getCategorias,
 		'getItemsCardapio': getItemsCardapio,
 		'saveCategoria': saveCategoria,
     }
 	
-    gateway = WSGIGateway(services, logger=logging, debug=True)
-    wsgiref.handlers.CGIHandler().run(gateway)
+	gateway = WSGIGateway(services, logger=logging, debug=True)
+	wsgiref.handlers.CGIHandler().run(gateway)
 
-pyamf.register_class( CategoriaItemCardapio, "CategoriaItemCardapio" )
+	pyamf.register_class( CategoriaItemCardapio, "CategoriaItemCardapio" )
 	
 if __name__ == '__main__':
-    main()
+	main()

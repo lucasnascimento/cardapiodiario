@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
+<head>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+	<link type="text/css" href="css/styles.css" rel="stylesheet" />	
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
+	<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.4.custom.min.js"></script>	
+	<title>{% block title %}Cardápio Diário{% endblock %}</title>
+</head>
+
+<body>
+	<script language="javascript">
+		$(document).ready(function(){
+			$( "button, input:submit, a" ).button();
+	    });
+	</script>
+
+    <div id="sidebar">
+        {% block sidebar %}
+		<a href="/meuRestaurane">Meu Restaurante</a>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

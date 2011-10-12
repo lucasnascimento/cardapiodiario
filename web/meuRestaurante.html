@@ -1,0 +1,105 @@
+{% extends "template.html" %}
+{% block title %}Ranking de Classificação{% endblock %}
+{% block content %}
+
+	<script language="javascript">
+		$(document).ready(function(){
+			//$( "#date" ).datepicker();
+			//$( "#dialog-form" ).hide();
+			
+			//$( "#newClassification" ).click( function(){
+			//	$( "#dialog-form" ).show('blind');
+			//});
+			
+			$( "#accordion" ).accordion();
+			$( "#accordionSeg" ).accordion();
+			$( "#accordionTer" ).accordion();
+			$( "#accordionQua" ).accordion();
+			$( "#accordionQui" ).accordion();
+			$( "#accordionSex" ).accordion();
+			$( "#accordionSab" ).accordion();
+			$( "#accordionDom" ).accordion();
+			
+			
+			$('.accordion .head').click(function() {
+				$(this).next().toggle();
+				return false;
+			}).next().hide();
+			
+		});
+	</script>
+
+	<div id="dialog-form" title="Nova Classificação">
+		<p class="validateTips">Todos campos requeridos.</p>	
+		<form action="/manageRestaurante" method="post">
+			<fieldset>
+
+				<label for="nomeFantasia">Nome Fantasia</label>
+				<input type="text" name="nomeFantasia" id='nomeFantasia' class="text ui-widget-content ui-corner-all"/>
+				<label for="contaFacebook">Facebook</label>
+				<input type="text" name="contaFacebook" id='contaFacebook' class="text ui-widget-content ui-corner-all"/>
+				<label for="contaTwitter">Twitter</label>
+				<input type="text" name="contaTwitter" id='contaTwitter' class="text ui-widget-content ui-corner-all"/>
+				
+				<label for="horarioPreferidoEnvio">Horário preferido para envio</label>
+				<select name='horarioPreferidoEnvio' id='horarioPreferidoEnvio' class="text ui-widget-content ui-corner-all">
+					<option value="09:00">09:00</option>
+					<option value="10:00">10:00</option>
+				</select>
+				
+				<br/>
+				
+				<div id="accordion">
+					<h3><a href="#">Cardápio Único</a></h3>
+					<div>Cardápio Único</div>
+					<h3><a href="#">Cardápio Semanal</a></h3>
+					<div>
+						<div id="accordionSeg">
+							<h3><a href="#">Segunda</a></h3>
+							<div>Conteudo Segunda</div>
+						</div>
+						<div id="accordionTer">
+							<h3><a href="#">Terça</a></h3>
+							<div>Conteudo Terça</div>
+						</div>
+						<div id="accordionQua">
+							<h3><a href="#">Quarta</a></h3>
+							<div>Conteudo Quarta</div>
+						</div>
+						<div id="accordionQui">
+							<h3><a href="#">Quinta</a></h3>
+							<div>Conteudo Quinta</div>
+						</div>
+						<div id="accordionSex">
+							<h3><a href="#">Sexta</a></h3>
+							<div>Conteudo Sexta</div>
+						</div>
+						<div id="accordionSab">
+							<h3><a href="#">Sábado</a></h3>
+							<div>Conteudo Sábado</div>
+						</div>
+						<div id="accordionDom">
+							<h3><a href="#">Dom</a></h3>
+							<div>Conteudo Domingo</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+				
+				<div id="destinatarios">
+					
+					
+					
+				</div>
+
+				<input type="submit" value="Salva"/>
+			</fieldset>
+		</form>
+	</div>
+
+	<a href='/'>Principal</a>
+	
+{% endblock %}
