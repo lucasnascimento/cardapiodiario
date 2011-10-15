@@ -4,20 +4,33 @@ import pyamf
 
 from google.appengine.ext import db
 from pyamf.remoting.gateway.wsgi import WSGIGateway
+from aetypes import Enum
 
-class CategoriaItemCardapio(db.Model):
+
+class DiaCardapio(Enum):
+	domingo = "domingo"
+	segunda = "segunda"
+	terca = "terca"
+	quarta = "quarta"
+	quinta = "quinta"
+	sexta = "sexta"
+	sabado = "sabado"
+	unico = "unico"
+
+class TipoPrato(db.Model):
 	nome = db.StringProperty()
 	
-class ItemCardapio(db.Model):
-	categoria = db.ReferenceProperty(CategoriaItemCardapio)
+class Prato(db.Model):
+	tipoPrato = db.ReferenceProperty(TipoPrato)
 	nome = db.StringProperty()
 	
 class Cardapio(db.Model):
 	nome = db.StringProperty()
-	itens = db.ListProperty(db.Key)
 	descricao = db.StringProperty()
+	dia_semana = db.StringProperty()
+	pratos = db.ListProperty(db.Key)
 
-class Usuario(db.Model):
+class Destinario(db.Model):
 	email = db.ListProperty(db.Email)
 	contaFacebook = db.StringProperty()
 	contaTwitter = db.StringProperty()	
@@ -26,25 +39,22 @@ class Restaurante(db.Model):
 	nomeFantasia = db.StringProperty()
 	conta_facebook = db.StringProperty()
 	conta_twitter = db.StringProperty()
-	clientes = db.ListProperty(db.Key)
-	cardapioUnico = db.ReferenceProperty(Cardapio, collection_name="restaurante_unico_set")
-	cardapioSegunda = db.ReferenceProperty(Cardapio, collection_name="restaurante_segunda_set")
-	cardapioTerca = db.ReferenceProperty(Cardapio, collection_name="restaurante_terca_set")
-	cardapioQuarta = db.ReferenceProperty(Cardapio, collection_name="restaurante_quarta_set")
-	cardapioQuinta = db.ReferenceProperty(Cardapio, collection_name="restaurante_quinta_set")
-	cardapioSexta = db.ReferenceProperty(Cardapio, collection_name="restaurante_sexta_set")
-	cardapioSabado = db.ReferenceProperty(Cardapio, collection_name="restaurante_sabado_set")
-	cardapioDomingo = db.ReferenceProperty(Cardapio, collection_name="restaurante_domingo_set")
-		
-class Agendamento(db.Model):
-	restaurante  = db.ReferenceProperty(Restaurante)
-	usuarios  = db.ReferenceProperty(Usuario)
+	tipo_cardapio = db.StringProperty()
+	email_cabecalho = db.TextProperty()
+	email_rodape = db.TextProperty()
+	cardapios = db.ListProperty(db.Key)
+	tipo_pratos = db.ListProperty(db.Key)
+	pratos = db.ListProperty(db.Key)
 	
-class HistoricoEnvio(db.Model):
-	restaurante = db.ReferenceProperty(Restaurante)
-	usuarios   = db.ReferenceProperty(Usuario)
-	cardapio = db.ReferenceProperty(Cardapio)
-	data = db.DateTimeProperty(auto_now_add=True)
+class DestinatarioRestaurante(db.Model):
+	destinatario = db.Reference(Destinario, collection_name = 'restaurantes')	
+	restaurante = db.Reference(Restaurante, collection_name = 'destinatarios')
+
+
+
+
+
+
 	
 def saveCategoria(newCategoria):
 	newCategoria.put()
@@ -54,12 +64,12 @@ def deleteCategoria(categoriaKey):
 	db.delete(categoriaKey)
 	
 def getCategorias():
-	return CategoriaItemCardapio.all().fetch(100)
+	return TipoPrato.all().fetch(100)
 
 def getItemsCardapio():
 	itemCardapio = ItemCardapio()
 	itemCardapio.nome = "teste"
-	itemCardapio.categoria = CategoriaItemCardapio.get("ahJkZXZ-Y2FyZGFwaW9kaWFyaW9yGwsSFUNhdGVnb3JpYUl0ZW1DYXJkYXBpbxgGDA")
+	itemCardapio.categoria = TipoPrato.get("ahJkZXZ-Y2FyZGFwaW9kaWFyaW9yGwsSFUNhdGVnb3JpYUl0ZW1DYXJkYXBpbxgGDA")
 	itemCardapio.put()
 	return ItemCardapio.all().fetch(100)	
 	
@@ -74,7 +84,7 @@ def main():
 	gateway = WSGIGateway(services, logger=logging, debug=True)
 	wsgiref.handlers.CGIHandler().run(gateway)
 
-	pyamf.register_class( CategoriaItemCardapio, "CategoriaItemCardapio" )
+	pyamf.register_class( TipoPrato, "TipoPrato" )
 	
 if __name__ == '__main__':
 	main()
