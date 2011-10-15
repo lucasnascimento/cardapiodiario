@@ -3,6 +3,7 @@ import wsgiref.handlers
 import pyamf
 
 from google.appengine.ext import db
+from google.appengine.ext.db import polymodel
 from pyamf.remoting.gateway.wsgi import WSGIGateway
 from aetypes import Enum
 
@@ -16,6 +17,7 @@ class DiaCardapio(Enum):
 	sexta = "sexta"
 	sabado = "sabado"
 	unico = "unico"
+	variado = "variado"
 
 class TipoPrato(db.Model):
 	nome = db.StringProperty()
@@ -24,11 +26,13 @@ class Prato(db.Model):
 	tipoPrato = db.ReferenceProperty(TipoPrato)
 	nome = db.StringProperty()
 	
-class Cardapio(db.Model):
+class Cardapio(polymodel.PolyModel):
 	nome = db.StringProperty()
 	descricao = db.StringProperty()
-	dia_semana = db.StringProperty()
 	pratos = db.ListProperty(db.Key)
+
+class CardapioConfig(Cardapio):
+	dia_semana = db.StringProperty()
 
 class Destinario(db.Model):
 	email = db.ListProperty(db.Email)
@@ -47,14 +51,19 @@ class Restaurante(db.Model):
 	pratos = db.ListProperty(db.Key)
 	
 class DestinatarioRestaurante(db.Model):
-	destinatario = db.Reference(Destinario, collection_name = 'restaurantes')	
-	restaurante = db.Reference(Restaurante, collection_name = 'destinatarios')
+	destinatario = db.Reference(Destinario, collection_name = 'destinatario_restaurante')	
+	restaurante = db.Reference(Restaurante, collection_name = 'destinatario_restaurante')
 
+class Mensagem(db.Model):
+	data_envio = db.DateTimeProperty()
+	restaurante = db.ReferenceProperty(Restaurante, collection_name = "mensagem")
+	cardapio = db.ReferenceProperty(Cardapio, collection_name = "mensagem")
+	destinatarios = db.ListProperty(db.Key)
+	body = db.TextProperty()
 
-
-
-
-
+''' 
+Métodos de Serviço
+'''
 	
 def saveCategoria(newCategoria):
 	newCategoria.put()
@@ -64,20 +73,16 @@ def deleteCategoria(categoriaKey):
 	db.delete(categoriaKey)
 	
 def getCategorias():
-	return TipoPrato.all().fetch(100)
-
-def getItemsCardapio():
-	itemCardapio = ItemCardapio()
-	itemCardapio.nome = "teste"
-	itemCardapio.categoria = TipoPrato.get("ahJkZXZ-Y2FyZGFwaW9kaWFyaW9yGwsSFUNhdGVnb3JpYUl0ZW1DYXJkYXBpbxgGDA")
-	itemCardapio.put()
-	return ItemCardapio.all().fetch(100)	
+	return TipoPrato.all().fetch(100)	
 	
+
+'''
+Infra
+'''
 	
 def main():
 	services = {
 		'getCategorias': getCategorias,
-		'getItemsCardapio': getItemsCardapio,
 		'saveCategoria': saveCategoria,
     }
 	
@@ -85,6 +90,11 @@ def main():
 	wsgiref.handlers.CGIHandler().run(gateway)
 
 	pyamf.register_class( TipoPrato, "TipoPrato" )
+	pyamf.register_class( Prato, "Prato" )
+	pyamf.register_class( Cardapio, "Cardapio" )
+	pyamf.register_class( Destinario, "Destinario" )
+	pyamf.register_class( Restaurante, "Restaurante" )
+	pyamf.register_class( DestinatarioRestaurante, "DestinatarioRestaurante" )
 	
 if __name__ == '__main__':
 	main()
