@@ -21,12 +21,17 @@ def recuperarRestaurantePorNome(nome):
 
 def recuperarRestaurantePorKey(key):
 	return db.get(key)
+
+def recuperarRestaurantes():
+	return Restaurante.all().fetch(100) 
 	
 def main():
 	services = {
 		'salvarRestaurante': salvarRestaurante,
 		'recuperarRestaurantePorNome': recuperarRestaurantePorNome,
 		'recuperarRestaurantePorKey': recuperarRestaurantePorKey,
+		'recuperarRestaurantes': recuperarRestaurantes,
+
     }
 	
 	gateway = WSGIGateway(services, logger=logging, debug=True)
