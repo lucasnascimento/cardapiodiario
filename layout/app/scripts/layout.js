@@ -8,10 +8,6 @@ var layoutApp = angular.module('layoutApp', [])
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/restaurant', {
-        templateUrl: 'views/restaurant.html',
-        controller: 'RestaurantCtrl'
-      })
       .otherwise({
         redirectTo: '/'
       });
